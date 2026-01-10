@@ -1,0 +1,101 @@
+.login-root {
+  min-height: 100vh;
+  width: 100vw;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.login-box {
+  margin: 50px auto;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  width: 520px;
+  min-height: 500px;
+  padding: 48px 0 48px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.school-logo {
+  position: absolute;
+  left: 36px;
+  top: 20px;
+  height: 48px;
+}
+
+.login-title {
+  margin-bottom: 56px;
+  font-size: 23px;
+  font-weight: 700;
+  color: #333;
+}
+
+.login-form {
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.input-label {
+  font-size: 1rem;
+  color: #505050;
+  font-weight: 400;
+  margin-bottom: 4px;
+  display: block;
+}
+.login-input {
+  margin-top: 12px;
+  width: 100%;
+  padding: 16px 12px;
+  border: none;
+  border-bottom: 1px solid #e1e1e1;
+  outline: none;
+  font-size: 1rem;
+  background: transparent;
+  transition: border 0.2s;
+}
+.login-input:focus {
+  border-bottom: 1.5px solid #a0d5c7;
+}
+.error-msg {
+  color: #f14b4b;
+  font-size: 0.96rem;
+  margin-bottom: 12px;
+  text-align: left;
+}
+.login-btn {
+  margin-top: 24px;
+  width: 100%;
+  background: #a0d5c7;
+  border-radius: 16px;
+  border: none;
+  padding: 16px 0;
+  color: #fff;
+  font-size: 1.12rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.17s;
+}
+.login-btn:disabled {
+  background: #baddd1;
+  cursor: not-allowed;
+}
+.register-guide {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 1rem;
+  color: #454545;
+}
+.register-guide a {
+  color: #55aa98;
+  transition: color 0.16s;
+  text-decoration: underline;
+}
+.register-guide a:hover {
+  color: #3f8b7f;
+}

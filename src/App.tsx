@@ -1,10 +1,15 @@
-import Header from "./components/header";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Login, Signup } from './pages/auth';
 
 function App() {
   return (
-    <>
-      <Header />
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Signup />} />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

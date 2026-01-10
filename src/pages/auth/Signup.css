@@ -1,0 +1,110 @@
+.signup-root {
+  min-height: 100vh;
+  width: 100vw;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.signup-box {
+  margin: 48px auto;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #eee;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  width: 600px;
+  min-height: 700px;
+  padding: 72px 0 48px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.school-logo {
+  position: absolute;
+  left: 36px;
+  top: 36px;
+  height: 48px;
+}
+.signup-title {
+  margin-top: 24px;
+  margin-bottom: 56px;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+}
+.signup-form {
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.signup-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 36px;
+}
+.signup-input-half {
+  width: 48%;
+}
+.input-label {
+  font-size: 1rem;
+  color: #505050;
+  font-weight: 400;
+  margin-bottom: 4px;
+  display: block;
+}
+.signup-input {
+  margin-top: 12px;
+  width: 100%;
+  padding: 16px 12px;
+  border: none;
+  border-bottom: 1px solid #e1e1e1;
+  outline: none;
+  font-size: 1rem;
+  background: transparent;
+  transition: border 0.2s;
+}
+.signup-input:focus {
+  border-bottom: 1.5px solid #a0d5c7;
+}
+.error-msg {
+  color: #f14b4b;
+  font-size: 0.96rem;
+  margin-bottom: 12px;
+  text-align: left;
+}
+.signup-btn {
+  margin-top: 24px;
+  width: 100%;
+  background: #a0d5c7;
+  border-radius: 16px;
+  border: none;
+  padding: 16px 0;
+  color: #fff;
+  font-size: 1.12rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.17s;
+}
+.signup-btn:disabled {
+  background: #baddd1;
+  cursor: not-allowed;
+}
+.login-guide {
+  margin-top: 30px;
+  text-align: center;
+  font-size: 1rem;
+  color: #454545;
+}
+.login-guide a {
+  color: #55aa98;
+  transition: color 0.16s;
+  text-decoration: underline;
+}
+.login-guide a:hover {
+  color: #3f8b7f;
+}
