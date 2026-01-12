@@ -26,7 +26,7 @@ export default function Header(props: HeaderProps) {
   return (
     <header className="header">
       <div className="header-container">
-        <div className="logo-section">
+        <div className="logo-section" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
           <img
             src={logoImage}
             alt="경북소프트웨어마이스터고등학교"
