@@ -12,6 +12,7 @@ import SurveyModal from './components/SurveyModel';
 
 // 관리자 페이지
 import AdminUserEdit from './pages/admin/AdminUserEdit';
+import MyChats from './pages/chat/MyChats';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/chats/:chatRoomId" element={<ChatDetail />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/change-password" element={<ChangePassword />} />
+        <Route path="/my-chats" element={<MyChats />} />
 
         {/* 관리자 */}
         <Route path="/students" element={<Students />} />
