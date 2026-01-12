@@ -5,6 +5,7 @@ import { ChatDetail } from './pages/chat';
 import Home from './pages/Home';
 import UserProfile from './pages/UserProfile';
 import ChangePassword from './pages/ChangePassword';
+import MyChats from './pages/chat/MyChats';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/chats/:chatRoomId" element={<ChatDetail />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/change-password" element={<ChangePassword />} />
+        <Route path="/my-chats" element={<MyChats />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
