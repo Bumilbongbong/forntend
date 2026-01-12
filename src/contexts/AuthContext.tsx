@@ -44,9 +44,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoggedIn(true);
       setUserName(claims?.name || claims?.username || claims?.email || '');
       setIsAdmin(Boolean(claims?.role === 'ADMIN' || claims?.roles?.includes('ADMIN') || claims?.isAdmin));
-      setUserId(claims?.userId || claims?.id || null);
-      setUserEmail(claims?.email || '');
-      setStudentNum(claims?.studentNum || claims?.student_num || null);
+      
+      // userId는 숫자만 허용 (sub는 이메일일 수 있으므로 제외)
+      const userIdValue = claims?.userId || claims?.id;
+      const parsedUserId = userIdValue && typeof userIdValue === 'number' 
+        ? userIdValue 
+        : (userIdValue && !isNaN(Number(userIdValue)) ? Number(userIdValue) : null);
+      setUserId(parsedUserId);
+      
+      setUserEmail(claims?.email || claims?.emailAddress || '');
+      setStudentNum(claims?.studentNum || claims?.student_num || claims?.studentNumber || claims?.studentNumber || null);
     } else {
       setIsLoggedIn(false);
       setIsAdmin(false);
@@ -64,9 +71,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoggedIn(true);
     setUserName(claims?.name || claims?.username || claims?.email || '');
     setIsAdmin(Boolean(claims?.role === 'ADMIN' || claims?.roles?.includes('ADMIN') || claims?.isAdmin));
-    setUserId(claims?.userId || claims?.id || null);
-    setUserEmail(claims?.email || '');
-    setStudentNum(claims?.studentNum || claims?.student_num || null);
+    
+    // userId는 숫자만 허용 (sub는 이메일일 수 있으므로 제외)
+    const userIdValue = claims?.userId || claims?.id;
+    const parsedUserId = userIdValue && typeof userIdValue === 'number' 
+      ? userIdValue 
+      : (userIdValue && !isNaN(Number(userIdValue)) ? Number(userIdValue) : null);
+    setUserId(parsedUserId);
+    
+    setUserEmail(claims?.email || claims?.emailAddress || '');
+    setStudentNum(claims?.studentNum || claims?.student_num || claims?.studentNumber || claims?.studentNumber || null);
   };
 
   const logout = () => {

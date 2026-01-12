@@ -131,7 +131,53 @@ export async function changePassword(userId: number, oldPassword: string, newPas
   }
 }
 
-export async function updateUserInfo(userId: number, email: string, name: string, studentNum: number): Promise<void> {
+export interface UserInfoResponse {
+  userId: number;
+  email: string;
+  name: string;
+  studentNum?: number;
+  createdAt: string;
+}
+
+export interface UpdateUserInfoResponse {
+  userId: number;
+  email: string;
+  name: string;
+  studentNum: number;
+  createdAt: string;
+}
+
+export async function getUserInfo(): Promise<UserInfoResponse> {
+  const accessToken = localStorage.getItem('accessToken');
+  if (!accessToken) {
+    throw new Error('인증이 필요합니다.');
+  }
+  const res = await fetch(`${API_BASE}/api/user`, {
+    method: 'GET',
+    headers: { 
+      'Authorization': `Bearer ${accessToken}`,
+    },
+  });
+  const text = await res.text();
+  let result: ApiResponse<UserInfoResponse> | undefined;
+  try {
+    result = text ? JSON.parse(text) : undefined;
+  } catch {
+    throw new Error('서버 응답 데이터 형식이 올바르지 않습니다.');
+  }
+  if (!result) {
+    throw new Error('서버에서 데이터를 반환하지 않았습니다.');
+  }
+  if (!res.ok || !result.success) {
+    throw new Error(result.message || '회원 정보 조회에 실패했습니다.');
+  }
+  if (!result.data) {
+    throw new Error('회원 정보를 받아오지 못했습니다.');
+  }
+  return result.data;
+}
+
+export async function updateUserInfo(userId: number, email: string, name: string, studentNum: number): Promise<UpdateUserInfoResponse> {
   const accessToken = localStorage.getItem('accessToken');
   if (!accessToken) {
     throw new Error('인증이 필요합니다.');
@@ -145,7 +191,7 @@ export async function updateUserInfo(userId: number, email: string, name: string
     body: JSON.stringify({ email, name, studentNum }),
   });
   const text = await res.text();
-  let result: ApiResponse<any> | undefined;
+  let result: ApiResponse<UpdateUserInfoResponse> | undefined;
   try {
     result = text ? JSON.parse(text) : undefined;
   } catch {
@@ -157,4 +203,8 @@ export async function updateUserInfo(userId: number, email: string, name: string
   if (!res.ok || !result.success) {
     throw new Error(result.message || '회원 정보 수정에 실패했습니다.');
   }
+  if (!result.data) {
+    throw new Error('수정된 회원 정보를 받아오지 못했습니다.');
+  }
+  return result.data;
 }

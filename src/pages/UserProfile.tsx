@@ -2,32 +2,78 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/header';
 import { useAuth } from '../contexts/AuthContext';
-import { logout as logoutService, withdraw, updateUserInfo } from '../services/auth';
+import { logout as logoutService, withdraw, updateUserInfo, getUserInfo } from '../services/auth';
 import './UserProfile.css';
+
+// JWT 파싱 헬퍼 함수
+function decodeJWT(token: string) {
+  try {
+    const base64Url = token.split('.')[1];
+    if (!base64Url) return null;
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
+  } catch {
+    return null;
+  }
+}
 
 export default function UserProfile() {
   const navigate = useNavigate();
   const { isLoggedIn, userName, userId, userEmail, studentNum, logout, updateUserInfo: updateContext } = useAuth();
   const [editingField, setEditingField] = useState<'studentNum' | 'name' | 'email' | null>(null);
-  const [editValues, setEditValues] = useState({
-    studentNum: studentNum?.toString() || '',
-    name: userName || '',
-    email: userEmail || '',
+  const [profileData, setProfileData] = useState({
+    studentNum: '',
+    name: '',
+    email: '',
   });
   const [loading, setLoading] = useState(false);
+  const [loadingProfile, setLoadingProfile] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      navigate('/login');
-      return;
-    }
-    setEditValues({
-      studentNum: studentNum?.toString() || '',
-      name: userName || '',
-      email: userEmail || '',
-    });
-  }, [isLoggedIn, studentNum, userName, userEmail, navigate]);
+    const loadUserInfo = async () => {
+      if (!isLoggedIn) {
+        navigate('/login');
+        return;
+      }
+
+      setLoadingProfile(true);
+      try {
+        // API에서 사용자 정보 가져오기 (현재 로그인한 사용자)
+        const userInfo = await getUserInfo();
+        setProfileData({
+          studentNum: (userInfo.studentNum?.toString() || ''),
+          name: userInfo.name || '',
+          email: userInfo.email || '',
+        });
+        // Context도 업데이트 (userId 포함)
+        if (userInfo.userId) {
+          // userId가 있으면 context에 저장 (다른 곳에서 사용할 수 있도록)
+        }
+        if (userInfo.studentNum) {
+          updateContext(userInfo.name, userInfo.email, userInfo.studentNum);
+        } else {
+          // studentNum이 없으면 이름과 이메일만 업데이트
+          updateContext(userInfo.name, userInfo.email, studentNum || 0);
+        }
+      } catch (err: any) {
+        // API 실패 시 JWT에서 가져온 값 사용
+        setProfileData({
+          studentNum: (studentNum?.toString() || ''),
+          name: (userName || ''),
+          email: (userEmail || ''),
+        });
+        console.error('사용자 정보 조회 실패:', err);
+      } finally {
+        setLoadingProfile(false);
+      }
+    };
+
+    loadUserInfo();
+  }, [isLoggedIn, userId, navigate]);
 
   const handleEdit = (field: 'studentNum' | 'name' | 'email') => {
     setEditingField(field);
@@ -35,7 +81,7 @@ export default function UserProfile() {
   };
 
   const handleSave = async (field: 'studentNum' | 'name' | 'email') => {
-    if (!userId) {
+    if (!userId || typeof userId !== 'number') {
       setError('사용자 ID를 찾을 수 없습니다.');
       return;
     }
@@ -44,12 +90,23 @@ export default function UserProfile() {
     setError(null);
 
     try {
-      const newStudentNum = field === 'studentNum' ? Number(editValues.studentNum) : studentNum || 0;
-      const newName = field === 'name' ? editValues.name : userName;
-      const newEmail = field === 'email' ? editValues.email : userEmail;
+      const newStudentNum = field === 'studentNum' ? Number(profileData.studentNum) : (studentNum || Number(profileData.studentNum) || 0);
+      const newName = field === 'name' ? profileData.name : (userName || profileData.name);
+      const newEmail = field === 'email' ? profileData.email : (userEmail || profileData.email);
 
-      await updateUserInfo(userId, newEmail, newName, newStudentNum);
-      updateContext(newName, newEmail, newStudentNum);
+      // API 호출 및 응답 데이터 받기
+      const updatedData = await updateUserInfo(userId, newEmail, newName, newStudentNum);
+      
+      // 응답 데이터로 context 업데이트
+      updateContext(updatedData.name, updatedData.email, updatedData.studentNum);
+      
+      // 로컬 상태도 업데이트
+      setProfileData({
+        studentNum: updatedData.studentNum.toString(),
+        name: updatedData.name,
+        email: updatedData.email,
+      });
+      
       setEditingField(null);
     } catch (err: any) {
       setError(err.message || '정보 수정에 실패했습니다.');
@@ -60,10 +117,11 @@ export default function UserProfile() {
 
   const handleCancel = (field: 'studentNum' | 'name' | 'email') => {
     setEditingField(null);
-    setEditValues({
-      studentNum: studentNum?.toString() || '',
-      name: userName || '',
-      email: userEmail || '',
+    // 원래 값으로 복원
+    setProfileData({
+      studentNum: (studentNum?.toString() || profileData.studentNum || ''),
+      name: (userName || profileData.name || ''),
+      email: (userEmail || profileData.email || ''),
     });
     setError(null);
   };
@@ -108,11 +166,22 @@ export default function UserProfile() {
     return null;
   }
 
+  if (loadingProfile) {
+    return (
+      <div className="user-profile-container">
+        <Header />
+        <div className="profile-content">
+          <div style={{ textAlign: 'center', padding: '40px' }}>로딩 중...</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="user-profile-container">
       <Header />
       <div className="profile-content">
-        <h1 className="profile-title">{userName}님의 페이지</h1>
+        <h1 className="profile-title">{profileData.name || userName}님의 페이지</h1>
         
         <div className="profile-cards">
           <div className="profile-card">
@@ -126,8 +195,8 @@ export default function UserProfile() {
                   <>
                     <input
                       type="text"
-                      value={editValues.studentNum}
-                      onChange={(e) => setEditValues({ ...editValues, studentNum: e.target.value.replace(/[^0-9]/g, '') })}
+                      value={profileData.studentNum}
+                      onChange={(e) => setProfileData({ ...profileData, studentNum: e.target.value.replace(/[^0-9]/g, '') })}
                       className="edit-input"
                       maxLength={4}
                     />
@@ -138,7 +207,7 @@ export default function UserProfile() {
                   </>
                 ) : (
                   <>
-                    <span className="info-value">{studentNum || '-'}</span>
+                    <span className="info-value">{profileData.studentNum || '-'}</span>
                     <button onClick={() => handleEdit('studentNum')} className="edit-icon">✏️</button>
                   </>
                 )}
@@ -152,8 +221,8 @@ export default function UserProfile() {
                   <>
                     <input
                       type="text"
-                      value={editValues.name}
-                      onChange={(e) => setEditValues({ ...editValues, name: e.target.value })}
+                      value={profileData.name}
+                      onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
                       className="edit-input"
                     />
                     <div className="edit-buttons">
@@ -163,7 +232,7 @@ export default function UserProfile() {
                   </>
                 ) : (
                   <>
-                    <span className="info-value">{userName || '-'}</span>
+                    <span className="info-value">{profileData.name || '-'}</span>
                     <button onClick={() => handleEdit('name')} className="edit-icon">✏️</button>
                   </>
                 )}
@@ -177,8 +246,8 @@ export default function UserProfile() {
                   <>
                     <input
                       type="email"
-                      value={editValues.email}
-                      onChange={(e) => setEditValues({ ...editValues, email: e.target.value })}
+                      value={profileData.email}
+                      onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
                       className="edit-input"
                     />
                     <div className="edit-buttons">
@@ -188,7 +257,7 @@ export default function UserProfile() {
                   </>
                 ) : (
                   <>
-                    <span className="info-value">{userEmail || '-'}</span>
+                    <span className="info-value">{profileData.email || '-'}</span>
                     <button onClick={() => handleEdit('email')} className="edit-icon">✏️</button>
                   </>
                 )}
