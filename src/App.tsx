@@ -10,6 +10,7 @@ import MyChat from './pages/chat/MyChat';
 import Students from './pages/Students';
 import AdminChatList from './pages/chat/AdminChatList';
 import AdminUserEdit from './pages/admin/AdminUserEdit';
+import AdminChat from './pages/admin/AdminChat';
 
 function App() {
   return (
@@ -25,14 +26,14 @@ function App() {
         {/* 게시판 */}
         <Route path="/boards/public" element={<PublicBoard />} />
 
-        {/* 채팅 */}
+        {/* 사용자 채팅 */}
         <Route path="/chat" element={<MyChat />} />
         <Route path="/my-chat" element={<MyChat />} />
         <Route path="/chats/:chatRoomId" element={<ChatDetail />} />
 
-        {/* 관리자 채팅 목록 */}
+        {/* 관리자 채팅 */}
         <Route path="/admin/chats" element={<AdminChatList />} />
-        <Route path="/admin/chats/:chatRoomId" element={<ChatDetail />} />
+        <Route path="/admin/chats/:chatRoomId" element={<AdminChat />} />
 
         {/* 관리자 학생 관리 */}
         <Route path="/students" element={<Students />} />
