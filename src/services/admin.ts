@@ -90,7 +90,7 @@ export async function updateAdminUser(
     email: string;
     name: string;
     studentNum: number;
-    newPassword: string;
+    newPassword?: string;
   }
 ): Promise<void> {
   const accessToken = localStorage.getItem('accessToken');
