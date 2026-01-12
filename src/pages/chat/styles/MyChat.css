@@ -1,109 +1,113 @@
+/* 1. 기본 레이아웃 및 페이지 구조 */
 .mychat-page {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    background-color: #ffffff;
-  }
-  
-  .mychat-container {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-  }
-  
-  /* 사이드바 스타일 */
-  .mychat-sidebar {
-    width: 280px;
-    border-right: 1px solid #f0f0f0;
-    display: flex;
-    flex-direction: column;
-    padding: 20px 0;
-  }
-  
-  .new-chat-btn {
-    padding: 0 24px;
-    margin-bottom: 30px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  
-  .chat-list-section {
-    flex: 1;
-    overflow-y: auto;
-  }
-  
-  .list-title {
-    padding: 0 24px;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 20px;
-  }
-  
-  .chat-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .chat-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 24px;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  
-  .chat-item:hover {
-    background-color: #f9f9f9;
-  }
-  
-  .chat-item-title {
-    font-size: 14px;
-    color: #333;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-right: 10px;
-  }
-  
-  /* 배지 스타일 */
-  .chat-status-badge {
-    font-size: 11px;
-    padding: 2px 8px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    min-width: 50px;
-    text-align: center;
-  }
-  
-  .status-ing { color: #888; border-color: #ddd; } /* 진행 중 */
-  .status-adopted { color: #4CAF50; border-color: #4CAF50; } /* 채택됨 */
-  .status-rejected { color: #FF4D4F; border-color: #FF4D4F; } /* 반려됨 */
-  .status-ended { color: #999; border-color: #999; } /* 종료됨 */
-  
-  /* 메인 영역 */
-  .mychat-content {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #fafafa;
-  }
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #ffffff;
+}
 
-  /* 채팅방 선택 시 하이라이트 */
+.mychat-container {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* 2. 사이드바 스타일 */
+.mychat-sidebar {
+  width: 280px;
+  border-right: 1px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+}
+
+.new-chat-btn {
+  padding: 0 24px;
+  margin-bottom: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chat-list-section {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.list-title {
+  padding: 0 24px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.chat-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.chat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.chat-item:hover {
+  background-color: #f9f9f9;
+}
+
 .chat-item.active {
   background-color: #e6f7ff;
   border-left: 4px solid #1890ff;
 }
 
-/* 메시지 영역 레이아웃 */
+.chat-item-title {
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 10px;
+}
+
+/* 3. 상태 배지 스타일 (공통 및 상태별) */
+.chat-status-badge {
+  font-size: 12px;
+  padding: 2px 14px;
+  border-radius: 6px;
+  background-color: #fff;
+  border: 1px solid #d9d9d9;
+  color: #999;
+  display: inline-flex;
+  align-items: center;
+  height: fit-content;
+  min-width: 50px;
+  justify-content: center;
+}
+
+.status-ing { color: #999; border-color: #d9d9d9; }
+.status-adopted { color: #52c41a; border-color: #b7eb8f; }
+.status-rejected { color: #ff4d4f; border-color: #ffa39e; }
+.status-ended { color: #999; border-color: #999; }
+
+/* 4. 메인 채팅 영역 */
+.mychat-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fafafa;
+}
+
 .chat-window {
   display: flex;
   flex-direction: column;
@@ -112,12 +116,49 @@
   background: white;
 }
 
+/* 5. 채팅 상세 헤더 (이미지 레이아웃 반영) */
 .chat-header {
-  padding: 15px 25px;
-  border-bottom: 1px solid #eee;
+  padding: 30px 40px;
+  border-bottom: 1px solid #f0f0f0;
   background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* 왼쪽 정렬 */
+  gap: 12px;
+}
+
+.header-title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+  color: #333;
+}
+
+.header-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* 왼쪽 정렬 */
+  gap: 16px;
+  font-size: 14px;
+  color: #999;
+}
+
+.author-info {
+  font-weight: 400;
+}
+
+.date-info {
+  letter-spacing: -0.5px;
+  margin-left: 4px;
+}
+
+/* 6. 메시지 목록 스타일 */
 .message-list {
   flex: 1;
   padding: 20px;
@@ -172,4 +213,56 @@
   text-align: center;
   color: #999;
   margin-top: 50px;
+}
+.chat-input-wrapper {
+  padding: 20px 40px;
+  background-color: #fff;
+  border-top: 1px solid #f0f0f0;
+}
+
+.chat-input-container {
+  display: flex;
+  align-items: center;
+  background-color: #f0f0f0;
+  padding: 8px 16px;
+  border-radius: 12px;
+  gap: 12px;
+}
+
+.chat-input-container input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  padding: 8px 0;
+}
+
+.plus-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.send-btn {
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s;
+}
+
+.send-btn:hover {
+  color: #1890ff;
+}
+
+/* 메시지 리스트 하단 여백 확보 (입력창에 가려지지 않게) */
+.message-list {
+  scroll-behavior: smooth;
 }
