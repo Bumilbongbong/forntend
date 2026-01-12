@@ -159,7 +159,7 @@ export default function Home() {
               cursor: 'pointer',
               marginTop: 12,
             }}
-            onClick={() => navigate('/my-chats')}
+            onClick={() => navigate('/my-chat')}
           >
             {isAdmin ? '조회하기' : '채팅방 생성하기'} &rarr;
           </button>
