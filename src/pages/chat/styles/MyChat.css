@@ -116,15 +116,6 @@
   background: white;
 }
 
-/* 5. 채팅 상세 헤더 (이미지 레이아웃 반영) */
-.chat-header {
-  padding: 30px 40px;
-  border-bottom: 1px solid #f0f0f0;
-  background: #fff;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
 
 .header-top {
   display: flex;
@@ -336,4 +327,34 @@
   margin-top: 4px;
   align-self: flex-end;
   opacity: 0.8;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between; /* 양 끝 정렬 */
+  align-items: center;
+  padding: 15px 25px;
+  border-bottom: 1px solid #eee;
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-exit-btn {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  padding: 6px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  color: #666;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.chat-exit-btn:hover {
+  background-color: #ec8e8e;
+  color: white;
+  border-color: #ec8e8e;
 }
